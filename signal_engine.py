@@ -109,17 +109,17 @@ def compute_composite_score(df: pd.DataFrame) -> pd.DataFrame:
     out = compute_indicators(df)
     out["prev_close"] = out["close"].shift(1)
 
-    trend = out.apply(_trend_score, axis=1)
-    momentum = out.apply(_momentum_score, axis=1)
-    volatility = out.apply(_volatility_score, axis=1)
-    volume = out.apply(_volume_score, axis=1)
+    out["raw_trend"] = out.apply(_trend_score, axis=1)
+    out["raw_momentum"] = out.apply(_momentum_score, axis=1)
+    out["raw_volatility"] = out.apply(_volatility_score, axis=1)
+    out["raw_volume"] = out.apply(_volume_score, axis=1)
 
     total_weight = sum(WEIGHTS.values())
     out["composite_score"] = (
-        trend * WEIGHTS["trend"]
-        + momentum * WEIGHTS["momentum"]
-        + volatility * WEIGHTS["volatility"]
-        + volume * WEIGHTS["volume"]
+        out["raw_trend"] * WEIGHTS["trend"]
+        + out["raw_momentum"] * WEIGHTS["momentum"]
+        + out["raw_volatility"] * WEIGHTS["volatility"]
+        + out["raw_volume"] * WEIGHTS["volume"]
     ) / total_weight
 
     def label(score):
@@ -138,14 +138,56 @@ def compute_composite_score(df: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
+def generate_explanation(row) -> str:
+    """Returns a short human-readable explanation for the signal."""
+    parts = []
+    if float(row["raw_trend"]) > 0:
+        parts.append("uptrend (price above EMAs)")
+    elif float(row["raw_trend"]) < 0:
+        parts.append("downtrend (price below EMAs)")
+
+    rsi = float(row["rsi14"])
+    if rsi < 30:
+        parts.append("oversold RSI")
+    elif rsi > 70:
+        parts.append("overbought RSI")
+
+    if float(row["macd_hist"]) > 0:
+        parts.append("bullish MACD")
+    else:
+        parts.append("bearish MACD")
+
+    bb_width = float(row["bb_upper"] - row["bb_lower"])
+    if bb_width != 0:
+        bb_pos = float(row["close"] - row["bb_lower"]) / bb_width
+        if bb_pos < 0.2:
+            parts.append("near lower Bollinger Band")
+        elif bb_pos > 0.8:
+            parts.append("near upper Bollinger Band")
+
+    vol = float(row["vol_ratio"])
+    if vol > 1.5:
+        parts.append(f"high volume ({vol:.1f}x avg)")
+
+    return ", ".join(parts) if parts else "mixed signals"
+
+
 def latest_signal(df: pd.DataFrame) -> dict:
     """Convenience function: run the engine and return just today's result."""
     scored = compute_composite_score(df)
     last = scored.iloc[-1]
     return {
-        "signal": last["signal"],
-        "score": round(last["composite_score"], 1),
-        "close": round(last["close"], 2),
-        "rsi": round(last["rsi14"], 1),
-        "trend": "up" if last["ema50"] > last["ema200"] else "down",
+        "signal": str(last["signal"]),
+        "score": round(float(last["composite_score"]), 1),
+        "close": round(float(last["close"]), 2),
+        "rsi": round(float(last["rsi14"]), 1),
+        "trend": "up" if float(last["ema50"]) > float(last["ema200"]) else "down",
+        "components": {
+            "trend": round(float(last["raw_trend"]), 1),
+            "momentum": round(float(last["raw_momentum"]), 1),
+            "volatility": round(float(last["raw_volatility"]), 1),
+            "volume": round(float(last["raw_volume"]), 1),
+        },
+        "weights": {k: int(v) for k, v in WEIGHTS.items()},
+        "explanation": generate_explanation(last),
     }
