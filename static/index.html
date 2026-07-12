@@ -17,7 +17,8 @@
   h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
   .subtitle { color: #8a8f98; font-size: 14px; margin-bottom: 28px; }
 
-  .controls { display: flex; gap: 10px; margin-bottom: 24px; }
+  .controls { display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
+  .error { color: #f87171; font-size: 14px; margin-top: -16px; margin-bottom: 20px; display: none; }
   input {
     background: #1a1d27; border: 1px solid #2c2f3a; color: #e6e6e6;
     padding: 10px 14px; border-radius: 8px; font-size: 14px; flex: 1;
@@ -50,12 +51,14 @@
 <body>
 <div class="container">
   <h1>Stock Signal Engine</h1>
-  <div class="subtitle">Composite technical signal — sample data for now</div>
+  <div class="subtitle">Composite technical signal — powered by yfinance</div>
 
   <div class="controls">
-    <input id="symbolInput" placeholder="Symbol label (e.g. TCS, RELIANCE)" value="SAMPLE">
+    <input id="symbolInput" placeholder="Symbol (e.g. AAPL, TCS.NS, RELIANCE.NS)" value="RELIANCE.NS" onkeydown="if(event.key==='Enter')loadSignal()">
     <button onclick="loadSignal()">Get Signal</button>
   </div>
+
+  <div id="errorMessage" class="error"></div>
 
   <div class="card">
     <div class="signal-row">
@@ -66,7 +69,14 @@
       <span>Close: ₹<span id="closeValue">--</span></span>
       <span>RSI(14): <span id="rsiValue">--</span></span>
       <span>Trend: <span id="trendValue">--</span></span>
+      <span>MACD: <span id="macdValue">--</span></span>
     </div>
+    <div id="explanation" style="margin-top: 14px; padding-top: 14px; border-top: 1px solid #2c2f3a; color: #8a8f98; font-size: 13px;"></div>
+  </div>
+
+  <div id="componentsCard" class="card" style="display:none;">
+    <div style="font-size:13px; color:#8a8f98; margin-bottom:12px;">Score Breakdown</div>
+    <div id="componentsContainer" style="display:flex; gap:12px; flex-wrap:wrap;"></div>
   </div>
 
   <div class="card">
@@ -83,13 +93,43 @@ function badgeClass(signal) {
   return "hold";
 }
 
-async function loadSignal() {
-  const symbol = document.getElementById("symbolInput").value || "SAMPLE";
-  // simple trick so different symbol names produce different-looking sample data
-  const seed = [...symbol].reduce((a, c) => a + c.charCodeAt(0), 0) || 42;
+function showError(msg) {
+  document.getElementById("errorMessage").textContent = msg;
+  document.getElementById("errorMessage").style.display = msg ? "block" : "none";
+  document.getElementById("signalBadge").textContent = "--";
+  document.getElementById("signalBadge").className = "signal-badge hold";
+  document.getElementById("scoreValue").textContent = "--";
+  document.getElementById("closeValue").textContent = "--";
+  document.getElementById("rsiValue").textContent = "--";
+  document.getElementById("trendValue").textContent = "--";
+  document.getElementById("macdValue").textContent = "--";
+  document.getElementById("explanation").innerHTML = "";
+  document.getElementById("componentsCard").style.display = "none";
+  if (chart) { chart.destroy(); chart = null; }
+}
 
-  const res = await fetch(`/api/signal?symbol=${encodeURIComponent(symbol)}&seed=${seed}`);
+function componentBar(value, label, color) {
+  const pct = ((value + 100) / 200 * 100).toFixed(0);
+  return `<div style="flex:1; min-width:100px;">
+    <div style="font-size:11px; color:#8a8f98; margin-bottom:4px;">${label}</div>
+    <div style="background:#2c2f3a; border-radius:4px; height:8px; overflow:hidden;">
+      <div style="width:${pct}%; height:100%; background:${color}; border-radius:4px;"></div>
+    </div>
+    <div style="font-size:12px; margin-top:2px;">${value > 0 ? '+' : ''}${value}</div>
+  </div>`;
+}
+
+async function loadSignal() {
+  const symbol = document.getElementById("symbolInput").value || "RELIANCE.NS";
+  showError("");
+
+  const res = await fetch(`/api/signal?symbol=${encodeURIComponent(symbol)}`);
   const data = await res.json();
+
+  if (data.error) {
+    showError(data.error);
+    return;
+  }
 
   const badge = document.getElementById("signalBadge");
   badge.textContent = data.today.signal;
@@ -99,6 +139,18 @@ async function loadSignal() {
   document.getElementById("closeValue").textContent = data.today.close;
   document.getElementById("rsiValue").textContent = data.today.rsi;
   document.getElementById("trendValue").textContent = data.today.trend;
+  document.getElementById("macdValue").textContent = data.today.explanation.includes("bullish MACD") ? "Bullish" : "Bearish";
+
+  const expl = document.getElementById("explanation");
+  expl.innerHTML = `<strong>Why?</strong> ${data.today.explanation}. Weights: Trend ${data.today.weights.trend}%, Momentum ${data.today.weights.momentum}%, Volatility ${data.today.weights.volatility}%, Volume ${data.today.weights.volume}%.`;
+
+  const comp = data.today.components;
+  document.getElementById("componentsContainer").innerHTML =
+    componentBar(comp.trend, "Trend", "#4f7cff") +
+    componentBar(comp.momentum, "Momentum", "#eab308") +
+    componentBar(comp.volatility, "Volatility", "#a78bfa") +
+    componentBar(comp.volume, "Volume", "#4ade80");
+  document.getElementById("componentsCard").style.display = "block";
 
   const labels = data.history.map(d => d.date);
   const prices = data.history.map(d => d.close);
