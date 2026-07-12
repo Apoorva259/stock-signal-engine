@@ -1,19 +1,19 @@
 """
 demo.py
 
-Run this to see the signal engine work end-to-end, using generated
-sample price data (a random walk with some trend, standing in for
-real Zerodha data for now).
+Run this to see the signal engine work end-to-end, fetches real
+OHLCV data via yfinance. Falls back to synthetic sample data if
+the symbol isn't found.
 
-Once you're ready to connect real data, you'll replace `generate_sample_data()`
-with a call to Zerodha's Kite Connect historical data endpoint — the rest
-of the pipeline (indicators.py, signal_engine.py) doesn't change at all.
-
-Run with:  python demo.py
+Usage:
+    python demo.py              # defaults to RELIANCE.NS
+    python demo.py TCS.NS       # fetch a specific symbol
+    python demo.py AAPL         # US stocks work too
 """
 
 import numpy as np
 import pandas as pd
+import yfinance as yf
 from signal_engine import compute_composite_score, latest_signal
 
 
@@ -47,12 +47,35 @@ def generate_sample_data(days: int = 300, start_price: float = 1500.0, seed: int
     return df
 
 
+def fetch_stock_data(symbol: str, days: int = 300) -> pd.DataFrame | None:
+    """Fetches real historical OHLCV data using yfinance.
+    Returns None if the symbol isn't found."""
+    try:
+        ticker = yf.Ticker(symbol)
+        df = ticker.history(period=f"{days + 30}d")
+        if df.empty:
+            return None
+        df = df.reset_index()
+        df.columns = [c.lower() for c in df.columns]
+        keep = {"date", "open", "high", "low", "close", "volume"}
+        df = df[[c for c in df.columns if c in keep]]
+        df["date"] = pd.to_datetime(df["date"]).dt.tz_localize(None)
+        return df.tail(days).reset_index(drop=True)
+    except Exception:
+        return None
+
+
 if __name__ == "__main__":
-    df = generate_sample_data()
+    import sys
+    symbol = sys.argv[1] if len(sys.argv) > 1 else "RELIANCE.NS"
+    df = fetch_stock_data(symbol)
+    if df is None:
+        print(f"Error: no data found for symbol '{symbol}'")
+        sys.exit(1)
 
     scored = compute_composite_score(df)
 
-    print("Last 10 days of signals:\n")
+    print(f"Last 10 days of signals for {symbol}:\n")
     print(
         scored[["date", "close", "rsi14", "macd_hist", "composite_score", "signal"]]
         .tail(10)
