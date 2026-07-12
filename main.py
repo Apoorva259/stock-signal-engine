@@ -19,7 +19,7 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
-from demo import generate_sample_data
+from data import fetch_stock_data
 from signal_engine import compute_composite_score, latest_signal
 
 app = FastAPI(title="Stock Signal Engine")
@@ -35,22 +35,24 @@ app.add_middleware(
 
 
 @app.get("/api/signal")
-def get_signal(symbol: str = "SAMPLE", seed: int = 42):
+def get_signal(symbol: str = "RELIANCE.NS", seed: int = 42):
     """
     Returns today's signal plus the recent price/score history for
-    charting. `symbol` is just a label for now (sample data doesn't
-    change based on it) — this is the exact spot where you'd later
-    plug in a real data source per-stock.
+    charting. Uses yfinance to fetch real data for the given symbol.
     """
-    df = generate_sample_data(seed=seed)
+    df = fetch_stock_data(symbol)
+    if df is None:
+        return {"error": f"No data found for symbol '{symbol}'. Check the ticker and try again."}
+
     scored = compute_composite_score(df)
 
+    today = latest_signal(df)
     history = scored.tail(60)[["date", "close", "composite_score", "signal"]].copy()
     history["date"] = history["date"].dt.strftime("%Y-%m-%d")
 
     return {
         "symbol": symbol,
-        "today": latest_signal(df),
+        "today": today,
         "history": history.to_dict(orient="records"),
     }
 
