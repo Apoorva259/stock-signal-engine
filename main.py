@@ -19,6 +19,7 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
+import yfinance as yf
 from data import fetch_stock_data
 from signal_engine import compute_composite_score, latest_signal
 
@@ -55,6 +56,23 @@ def get_signal(symbol: str = "RELIANCE.NS", seed: int = 42):
         "today": today,
         "history": history.to_dict(orient="records"),
     }
+
+
+@app.get("/api/search")
+def search_symbols(q: str = ""):
+    """Live search stock symbols via yfinance. Returns matching tickers."""
+    if not q or len(q.strip()) < 1:
+        return {"results": []}
+    try:
+        s = yf.Search(q.strip(), max_results=10)
+        results = [
+            {"symbol": r["symbol"], "name": r.get("shortname", ""), "exchange": r.get("exchange", "")}
+            for r in (s.quotes or [])
+            if r.get("symbol")
+        ]
+        return {"results": results}
+    except Exception:
+        return {"results": []}
 
 
 # Serve the frontend (index.html, etc.) from the /static folder at "/".

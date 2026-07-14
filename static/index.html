@@ -103,13 +103,8 @@
 
 <script>
 let chart = null;
-let tickers = [];
 let activeIdx = -1;
-
-async function initTickers() {
-  const res = await fetch("/tickers.json");
-  tickers = await res.json();
-}
+let searchTimer = null;
 
 function badgeClass(signal) {
   if (signal.includes("BUY")) return "buy";
@@ -143,25 +138,35 @@ function componentBar(value, label, color) {
   </div>`;
 }
 
-function showSuggestions() {
+async function showSuggestions() {
   const input = document.getElementById("symbolInput");
   const container = document.getElementById("suggestions");
-  const q = input.value.toLowerCase().trim();
+  const q = input.value.trim();
   if (!q) { container.style.display = "none"; return; }
 
-  const matches = tickers.filter(t =>
-    t.symbol.toLowerCase().includes(q) || t.name.toLowerCase().includes(q)
-  ).slice(0, 10);
+  try {
+    const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
+    const data = await res.json();
+    const matches = data.results || [];
+    activeIdx = -1;
 
-  if (!matches.length) { container.style.display = "none"; return; }
+    if (!matches.length) { container.style.display = "none"; return; }
 
-  container.innerHTML = matches.map((t, i) =>
-    `<div class="${i === activeIdx ? 'active' : ''}" data-index="${i}" onclick="selectSuggestion('${t.symbol}')">
-      <span><span class="sym">${t.symbol}</span><span class="name">${t.name}</span></span>
-      <span class="exch">${t.exchange}</span>
-    </div>`
-  ).join("");
-  container.style.display = "block";
+    container.innerHTML = matches.map((t, i) =>
+      `<div class="${i === activeIdx ? 'active' : ''}" data-index="${i}" onclick="selectSuggestion('${t.symbol}')">
+        <span><span class="sym">${t.symbol}</span><span class="name">${t.name}</span></span>
+        <span class="exch">${t.exchange}</span>
+      </div>`
+    ).join("");
+    container.style.display = "block";
+  } catch {
+    container.style.display = "none";
+  }
+}
+
+function onSearchInput() {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(showSuggestions, 250);
 }
 
 function selectSuggestion(symbol) {
@@ -281,13 +286,12 @@ async function loadSignal() {
   });
 }
 
-document.getElementById("symbolInput").addEventListener("input", showSuggestions);
+document.getElementById("symbolInput").addEventListener("input", onSearchInput);
 document.getElementById("symbolInput").addEventListener("keydown", handleKey);
 document.getElementById("symbolInput").addEventListener("blur", () => setTimeout(() => {
   document.getElementById("suggestions").style.display = "none";
 }, 200));
 
-initTickers();
 loadSignal();
 </script>
 </body>
