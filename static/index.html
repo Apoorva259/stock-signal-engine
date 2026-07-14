@@ -58,6 +58,13 @@
   .score { font-size: 32px; font-weight: 700; }
   .meta { color: #8a8f98; font-size: 13px; margin-top: 10px; }
   .meta span { margin-right: 16px; }
+  .param-card {
+    flex:1; min-width:140px; background:#14171f; border:1px solid #2c2f3a;
+    border-radius:8px; padding:10px; font-size:12px;
+  }
+  .param-card .label { color:#8a8f98; font-size:10px; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px; }
+  .param-card .desc { color:#b0b5bd; line-height:1.4; }
+  .param-card .range { color:#6b7280; font-size:11px; margin-top:4px; }
 
   canvas { max-height: 320px; }
 </style>
@@ -95,6 +102,7 @@
   <div id="componentsCard" class="card" style="display:none;">
     <div style="font-size:13px; color:#8a8f98; margin-bottom:12px;">Score Breakdown</div>
     <div id="componentsContainer" style="display:flex; gap:12px; flex-wrap:wrap;"></div>
+    <div id="paramExplanations" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; padding-top:14px; border-top:1px solid #2c2f3a;"></div>
   </div>
 
   <div class="card">
@@ -254,6 +262,20 @@ async function loadSignal() {
     componentBar(comp.volatility, "Volatility", "#a78bfa") +
     componentBar(comp.volume, "Volume", "#4ade80");
   document.getElementById("componentsCard").style.display = "block";
+
+  const paramInfo = [
+    {label:"Trend", desc:"Measures price direction relative to 50-day and 200-day moving averages.", range: comp.trend > 0 ? "Above 0 = uptrend, below 0 = downtrend" : "Above 0 = uptrend, below 0 = downtrend"},
+    {label:"Momentum", desc:"RSI and MACD histogram gauge speed and strength of recent price changes.", range: comp.momentum > 0 ? "Above 0 = bullish momentum" : "Below 0 = bearish momentum"},
+    {label:"Volatility", desc:"Where price sits inside Bollinger Bands. Near lower band suggests value.", range: comp.volatility > 0 ? "Above 0 = near lower band (cheap)" : "Below 0 = near upper band (expensive)"},
+    {label:"Volume", desc:"Compares today's volume to 20-day average. High volume confirms price moves.", range: comp.volume > 0 ? "Above 0 = bullish volume confirmation" : "Below 0 = bearish volume confirmation"},
+  ];
+  document.getElementById("paramExplanations").innerHTML = paramInfo.map(p =>
+    `<div class="param-card">
+      <div class="label">${p.label}</div>
+      <div class="desc">${p.desc}</div>
+      <div class="range">${p.range}</div>
+    </div>`
+  ).join("");
 
   const labels = data.history.map(d => d.date);
   const prices = data.history.map(d => d.close);
