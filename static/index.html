@@ -19,10 +19,24 @@
 
   .controls { display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
   .error { color: #f87171; font-size: 14px; margin-top: -16px; margin-bottom: 20px; display: none; }
-  input {
-    background: #1a1d27; border: 1px solid #2c2f3a; color: #e6e6e6;
-    padding: 10px 14px; border-radius: 8px; font-size: 14px; flex: 1;
+  .autocomplete { position: relative; flex: 1; min-width: 200px; }
+  .autocomplete input {
+    width: 100%; background: #1a1d27; border: 1px solid #2c2f3a; color: #e6e6e6;
+    padding: 10px 14px; border-radius: 8px; font-size: 14px;
   }
+  .autocomplete input:focus { border-color: #4f7cff; outline: none; }
+  .suggestions {
+    position: absolute; top: 100%; left: 0; right: 0; z-index: 10;
+    background: #1a1d27; border: 1px solid #2c2f3a; border-radius: 0 0 8px 8px;
+    max-height: 300px; overflow-y: auto; display: none;
+  }
+  .suggestions div {
+    padding: 8px 14px; cursor: pointer; font-size: 13px; display: flex; justify-content: space-between;
+  }
+  .suggestions div:hover, .suggestions div.active { background: #2c2f3a; }
+  .suggestions .sym { color: #e6e6e6; font-weight: 600; }
+  .suggestions .name { color: #8a8f98; margin-left: 8px; }
+  .suggestions .exch { color: #4f7cff; font-size: 11px; }
   button {
     background: #4f7cff; color: white; border: none; padding: 10px 20px;
     border-radius: 8px; font-size: 14px; cursor: pointer; font-weight: 500;
@@ -54,7 +68,10 @@
   <div class="subtitle">Composite technical signal — powered by yfinance</div>
 
   <div class="controls">
-    <input id="symbolInput" placeholder="Symbol (e.g. AAPL, TCS.NS, RELIANCE.NS)" value="RELIANCE.NS" onkeydown="if(event.key==='Enter')loadSignal()">
+    <div class="autocomplete">
+      <input id="symbolInput" placeholder="Search stock (e.g. AAPL, TCS.NS, RELIANCE.NS)" value="RELIANCE.NS" autocomplete="off">
+      <div id="suggestions" class="suggestions"></div>
+    </div>
     <button onclick="loadSignal()">Get Signal</button>
   </div>
 
@@ -86,6 +103,13 @@
 
 <script>
 let chart = null;
+let tickers = [];
+let activeIdx = -1;
+
+async function initTickers() {
+  const res = await fetch("/tickers.json");
+  tickers = await res.json();
+}
 
 function badgeClass(signal) {
   if (signal.includes("BUY")) return "buy";
@@ -119,8 +143,72 @@ function componentBar(value, label, color) {
   </div>`;
 }
 
+function showSuggestions() {
+  const input = document.getElementById("symbolInput");
+  const container = document.getElementById("suggestions");
+  const q = input.value.toLowerCase().trim();
+  if (!q) { container.style.display = "none"; return; }
+
+  const matches = tickers.filter(t =>
+    t.symbol.toLowerCase().includes(q) || t.name.toLowerCase().includes(q)
+  ).slice(0, 10);
+
+  if (!matches.length) { container.style.display = "none"; return; }
+
+  container.innerHTML = matches.map((t, i) =>
+    `<div class="${i === activeIdx ? 'active' : ''}" data-index="${i}" onclick="selectSuggestion('${t.symbol}')">
+      <span><span class="sym">${t.symbol}</span><span class="name">${t.name}</span></span>
+      <span class="exch">${t.exchange}</span>
+    </div>`
+  ).join("");
+  container.style.display = "block";
+}
+
+function selectSuggestion(symbol) {
+  document.getElementById("symbolInput").value = symbol;
+  document.getElementById("suggestions").style.display = "none";
+  activeIdx = -1;
+  loadSignal();
+}
+
+function handleKey(e) {
+  const container = document.getElementById("suggestions");
+  const items = container.querySelectorAll("div");
+
+  if (e.key === "Enter") {
+    if (activeIdx >= 0 && items[activeIdx]) {
+      items[activeIdx].click();
+    } else {
+      loadSignal();
+    }
+    container.style.display = "none";
+    return;
+  }
+
+  if (e.key === "ArrowDown") {
+    e.preventDefault();
+    activeIdx = Math.min(activeIdx + 1, items.length - 1);
+    items.forEach((el, i) => el.classList.toggle("active", i === activeIdx));
+    if (items[activeIdx]) items[activeIdx].scrollIntoView({ block: "nearest" });
+  } else if (e.key === "ArrowUp") {
+    e.preventDefault();
+    activeIdx = Math.max(activeIdx - 1, -1);
+    items.forEach((el, i) => el.classList.toggle("active", i === activeIdx));
+  } else if (e.key === "Escape") {
+    container.style.display = "none";
+    activeIdx = -1;
+  }
+}
+
+document.addEventListener("click", (e) => {
+  if (!e.target.closest(".autocomplete")) {
+    document.getElementById("suggestions").style.display = "none";
+  }
+});
+
 async function loadSignal() {
-  const symbol = document.getElementById("symbolInput").value || "RELIANCE.NS";
+  const symbol = document.getElementById("symbolInput").value.trim() || "RELIANCE.NS";
+  document.getElementById("suggestions").style.display = "none";
   showError("");
 
   const res = await fetch(`/api/signal?symbol=${encodeURIComponent(symbol)}`);
@@ -193,6 +281,13 @@ async function loadSignal() {
   });
 }
 
+document.getElementById("symbolInput").addEventListener("input", showSuggestions);
+document.getElementById("symbolInput").addEventListener("keydown", handleKey);
+document.getElementById("symbolInput").addEventListener("blur", () => setTimeout(() => {
+  document.getElementById("suggestions").style.display = "none";
+}, 200));
+
+initTickers();
 loadSignal();
 </script>
 </body>

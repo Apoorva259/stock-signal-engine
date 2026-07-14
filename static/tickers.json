@@ -1,0 +1,612 @@
+[
+  {
+    "symbol": "RELIANCE.NS",
+    "name": "Reliance Industries",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "TCS.NS",
+    "name": "Tata Consultancy Services",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "HDFCBANK.NS",
+    "name": "HDFC Bank",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "INFY.NS",
+    "name": "Infosys",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "ICICIBANK.NS",
+    "name": "ICICI Bank",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "SBIN.NS",
+    "name": "State Bank of India",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "BHARTIARTL.NS",
+    "name": "Bharti Airtel",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "ITC.NS",
+    "name": "ITC Ltd",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "WIPRO.NS",
+    "name": "Wipro Ltd",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "HINDUNILVR.NS",
+    "name": "Hindustan Unilever",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "KOTAKBANK.NS",
+    "name": "Kotak Mahindra Bank",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "LT.NS",
+    "name": "Larsen & Toubro",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "BAJFINANCE.NS",
+    "name": "Bajaj Finance",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "AXISBANK.NS",
+    "name": "Axis Bank",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "TITAN.NS",
+    "name": "Titan Company",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "ASIANPAINT.NS",
+    "name": "Asian Paints",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "MARUTI.NS",
+    "name": "Maruti Suzuki India",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "SUNPHARMA.NS",
+    "name": "Sun Pharmaceutical",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "ULTRACEMCO.NS",
+    "name": "UltraTech Cement",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "NTPC.NS",
+    "name": "NTPC Ltd",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "POWERGRID.NS",
+    "name": "Power Grid Corporation",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "M&M.NS",
+    "name": "Mahindra & Mahindra",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "TRENT.NS",
+    "name": "Trent Ltd",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "BAJAJFINSV.NS",
+    "name": "Bajaj Finserv",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "HCLTECH.NS",
+    "name": "HCL Technologies",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "ADANIPORTS.NS",
+    "name": "Adani Ports & SEZ",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "JSWSTEEL.NS",
+    "name": "JSW Steel",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "TATASTEEL.NS",
+    "name": "Tata Steel",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "COALINDIA.NS",
+    "name": "Coal India",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "ONGC.NS",
+    "name": "Oil & Natural Gas Corp",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "BRITANNIA.NS",
+    "name": "Britannia Industries",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "NESTLEIND.NS",
+    "name": "Nestle India",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "HINDALCO.NS",
+    "name": "Hindalco Industries",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "TECHM.NS",
+    "name": "Tech Mahindra",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "BEL.NS",
+    "name": "Bharat Electronics",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "ADANIENT.NS",
+    "name": "Adani Enterprises",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "EICHERMOT.NS",
+    "name": "Eicher Motors",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "BAJAJ-AUTO.NS",
+    "name": "Bajaj Auto",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "HEROMOTOCO.NS",
+    "name": "Hero MotoCorp",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "CIPLA.NS",
+    "name": "Cipla",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "DRREDDY.NS",
+    "name": "Dr Reddy's Laboratories",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "DIVISLAB.NS",
+    "name": "Divi's Laboratories",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "APOLLOHOSP.NS",
+    "name": "Apollo Hospitals",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "GRASIM.NS",
+    "name": "Grasim Industries",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "BPCL.NS",
+    "name": "Bharat Petroleum",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "SBILIFE.NS",
+    "name": "SBI Life Insurance",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "HDFCLIFE.NS",
+    "name": "HDFC Life Insurance",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "INDUSINDBK.NS",
+    "name": "IndusInd Bank",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "TATAMOTORS.NS",
+    "name": "Tata Motors",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "SHRIRAMFIN.NS",
+    "name": "Shriram Finance",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "VEDL.NS",
+    "name": "Vedanta Ltd",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "IOC.NS",
+    "name": "Indian Oil Corp",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "GAIL.NS",
+    "name": "GAIL India",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "ZOMATO.NS",
+    "name": "Zomato Ltd",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "PNB.NS",
+    "name": "Punjab National Bank",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "BANKBARODA.NS",
+    "name": "Bank of Baroda",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "YESBANK.NS",
+    "name": "Yes Bank",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "IDFCFIRSTB.NS",
+    "name": "IDFC First Bank",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "DMART.NS",
+    "name": "Avenue Supermarts",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "TATACONSUM.NS",
+    "name": "Tata Consumer Products",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "DABUR.NS",
+    "name": "Dabur India",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "MARICO.NS",
+    "name": "Marico Ltd",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "PIDILITIND.NS",
+    "name": "Pidilite Industries",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "HAVELLS.NS",
+    "name": "Havells India",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "AMBUJACEM.NS",
+    "name": "Ambuja Cements",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "TVSMOTOR.NS",
+    "name": "TVS Motor Company",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "MCDOWELL-N.NS",
+    "name": "United Spirits",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "BANDHANBNK.NS",
+    "name": "Bandhan Bank",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "COLPAL.NS",
+    "name": "Colgate-Palmolive India",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "GODREJCP.NS",
+    "name": "Godrej Consumer Products",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "TORNTPHARM.NS",
+    "name": "Torrent Pharmaceuticals",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "LICHSGFIN.NS",
+    "name": "LIC Housing Finance",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "NHPC.NS",
+    "name": "NHPC Ltd",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "IRCTC.NS",
+    "name": "IRCTC",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "HAL.NS",
+    "name": "Hindustan Aeronautics",
+    "exchange": "NSE"
+  },
+  {
+    "symbol": "AAPL",
+    "name": "Apple Inc",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "MSFT",
+    "name": "Microsoft Corp",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "GOOGL",
+    "name": "Alphabet Inc",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "AMZN",
+    "name": "Amazon.com Inc",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "META",
+    "name": "Meta Platforms",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "NVDA",
+    "name": "NVIDIA Corp",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "TSLA",
+    "name": "Tesla Inc",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "JPM",
+    "name": "JPMorgan Chase",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "V",
+    "name": "Visa Inc",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "JNJ",
+    "name": "Johnson & Johnson",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "WMT",
+    "name": "Walmart Inc",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "MA",
+    "name": "Mastercard Inc",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "PG",
+    "name": "Procter & Gamble",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "XOM",
+    "name": "Exxon Mobil Corp",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "KO",
+    "name": "Coca-Cola Co",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "PEP",
+    "name": "PepsiCo Inc",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "MRK",
+    "name": "Merck & Co",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "ABBV",
+    "name": "AbbVie Inc",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "ORCL",
+    "name": "Oracle Corp",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "AMD",
+    "name": "Advanced Micro Devices",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "INTC",
+    "name": "Intel Corp",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "BA",
+    "name": "Boeing Co",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "DIS",
+    "name": "Walt Disney Co",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "NFLX",
+    "name": "Netflix Inc",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "ADBE",
+    "name": "Adobe Inc",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "CRM",
+    "name": "Salesforce Inc",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "UBER",
+    "name": "Uber Technologies",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "SQ",
+    "name": "Block Inc",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "PYPL",
+    "name": "PayPal Holdings",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "SNAP",
+    "name": "Snap Inc",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "SPOT",
+    "name": "Spotify Technology",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "TSM",
+    "name": "Taiwan Semiconductor",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "BABA",
+    "name": "Alibaba Group",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "NIO",
+    "name": "NIO Inc",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "PLTR",
+    "name": "Palantir Technologies",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "COIN",
+    "name": "Coinbase Global",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "HOOD",
+    "name": "Robinhood Markets",
+    "exchange": "NASDAQ/NYSE"
+  },
+  {
+    "symbol": "SPY",
+    "name": "SPDR S&P 500 ETF",
+    "exchange": "US ETF"
+  },
+  {
+    "symbol": "QQQ",
+    "name": "Invesco QQQ Trust",
+    "exchange": "US ETF"
+  },
+  {
+    "symbol": "VTI",
+    "name": "Vanguard Total Stock Market",
+    "exchange": "US ETF"
+  },
+  {
+    "symbol": "IVV",
+    "name": "iShares Core S&P 500",
+    "exchange": "US ETF"
+  },
+  {
+    "symbol": "VOO",
+    "name": "Vanguard S&P 500 ETF",
+    "exchange": "US ETF"
+  },
+  {
+    "symbol": "BND",
+    "name": "Vanguard Total Bond Market",
+    "exchange": "US ETF"
+  },
+  {
+    "symbol": "GLD",
+    "name": "SPDR Gold Shares",
+    "exchange": "US ETF"
+  },
+  {
+    "symbol": "SLV",
+    "name": "iShares Silver Trust",
+    "exchange": "US ETF"
+  },
+  {
+    "symbol": "EEM",
+    "name": "iShares MSCI Emerging Markets",
+    "exchange": "US ETF"
+  },
+  {
+    "symbol": "VNQ",
+    "name": "Vanguard Real Estate ETF",
+    "exchange": "US ETF"
+  }
+]
