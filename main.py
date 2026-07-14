@@ -65,11 +65,15 @@ def search_symbols(q: str = ""):
         return {"results": []}
     try:
         s = yf.Search(q.strip(), max_results=10)
-        results = [
-            {"symbol": r["symbol"], "name": r.get("shortname", ""), "exchange": r.get("exchange", "")}
-            for r in (s.quotes or [])
-            if r.get("symbol")
-        ]
+        results = []
+        for r in (s.quotes or []):
+            sym = r.get("symbol", "")
+            if not sym:
+                continue
+            name = r.get("shortname", "") or r.get("longname", "") or sym
+            if name == sym and r.get("longname"):
+                name = r["longname"]
+            results.append({"symbol": sym, "name": name, "exchange": r.get("exchange", "")})
         return {"results": results}
     except Exception:
         return {"results": []}
