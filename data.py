@@ -49,6 +49,7 @@ def fetch_stock_data(symbol: str, days: int = 300) -> pd.DataFrame | None:
         keep = {"date", "open", "high", "low", "close", "volume"}
         df = df[[c for c in df.columns if c in keep]]
         df["date"] = pd.to_datetime(df["date"]).dt.tz_localize(None)
+        df = df.dropna(subset=["close", "open", "high", "low"])
         return df.tail(days).reset_index(drop=True)
     except Exception:
         return None
