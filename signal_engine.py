@@ -172,21 +172,29 @@ def generate_explanation(row) -> str:
     return ", ".join(parts) if parts else "mixed signals"
 
 
+def _safe(value, decimals: int | None = None):
+    """Convert numpy/NaN values to JSON-safe types. NaN becomes None."""
+    if value is None or (isinstance(value, float) and (np.isnan(value) or np.isinf(value))):
+        return None
+    v = float(value)
+    return round(v, decimals) if decimals is not None else v
+
+
 def latest_signal(df: pd.DataFrame) -> dict:
     """Convenience function: run the engine and return just today's result."""
     scored = compute_composite_score(df)
     last = scored.iloc[-1]
     return {
         "signal": str(last["signal"]),
-        "score": round(float(last["composite_score"]), 1),
-        "close": round(float(last["close"]), 2),
-        "rsi": round(float(last["rsi14"]), 1),
+        "score": _safe(last["composite_score"], 1),
+        "close": _safe(last["close"], 2),
+        "rsi": _safe(last["rsi14"], 1),
         "trend": "up" if float(last["ema50"]) > float(last["ema200"]) else "down",
         "components": {
-            "trend": round(float(last["raw_trend"]), 1),
-            "momentum": round(float(last["raw_momentum"]), 1),
-            "volatility": round(float(last["raw_volatility"]), 1),
-            "volume": round(float(last["raw_volume"]), 1),
+            "trend": _safe(last["raw_trend"], 1),
+            "momentum": _safe(last["raw_momentum"], 1),
+            "volatility": _safe(last["raw_volatility"], 1),
+            "volume": _safe(last["raw_volume"], 1),
         },
         "weights": {k: int(v) for k, v in WEIGHTS.items()},
         "explanation": generate_explanation(last),
