@@ -12,6 +12,7 @@ also the part of this project that's genuinely interesting to talk
 about in an interview.
 """
 
+import numpy as np
 import pandas as pd
 from indicators import ema, rsi, macd, bollinger_bands, volume_spike_ratio, atr
 
